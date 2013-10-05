@@ -6,28 +6,33 @@
 # either the dual license version in 2003, or any later version.
 
 
-require 'iconv'
+unless ''.respond_to? :encode
+  require 'iconv'
+end
 
 
 module XSD
 
-
-class IconvCharset
-  def self.safe_iconv(to, from, str)
-    iconv = Iconv.new(to, from)
-    out = ""
-    begin
-      out << iconv.iconv(str)
-    rescue Iconv::IllegalSequence => e
-      out << e.success
-      ch, str = e.failed.split(//, 2)
-      out << '?'
-      warn("Failed to convert #{ch}")
-      retry
+  class IconvCharset
+    if ''.respond_to? :encode
+      def self.safe_iconv(to, from, str)
+        str.encode(to, from, :invalid => :replace, :undef => :replace, :replace => '?')
+      end
+    else
+    def self.safe_iconv(to, from, str)
+      iconv = Iconv.new(to, from)
+      out = ""
+      begin
+        out << iconv.iconv(str)
+      rescue Iconv::IllegalSequence => e
+        out << e.success
+        ch, str = e.failed.split(//, 2)
+        out << '?'
+        warn("Failed to convert #{ch}")
+        retry
+      end
+      return out
     end
-    return out
   end
-end
-
 
 end
