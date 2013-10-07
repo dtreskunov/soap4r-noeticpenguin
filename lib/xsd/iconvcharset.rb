@@ -19,21 +19,20 @@ module XSD
         str.encode(to, from, :invalid => :replace, :undef => :replace, :replace => '?')
       end
     else
-      def self.safe_iconv(to, from, str)
-        iconv = Iconv.new(to, from)
-        out = ""
-        begin
-          out << iconv.iconv(str)
-        rescue Iconv::IllegalSequence => e
-          out << e.success
-          ch, str = e.failed.split(//, 2)
-          out << '?'
-          warn("Failed to convert #{ch}")
-          retry
-        end
-        return out
+    def self.safe_iconv(to, from, str)
+      iconv = Iconv.new(to, from)
+      out = ""
+      begin
+        out << iconv.iconv(str)
+      rescue Iconv::IllegalSequence => e
+        out << e.success
+        ch, str = e.failed.split(//, 2)
+        out << '?'
+        warn("Failed to convert #{ch}")
+        retry
       end
+      return out
     end
-
+  end
 
 end
