@@ -34,6 +34,6 @@ module XSD
         return out
       end
     end
-  end
+
 
 end
