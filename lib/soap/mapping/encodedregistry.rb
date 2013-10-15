@@ -22,7 +22,8 @@ class SOAPException
   attr_reader :excn_type_name, :cause
 
   def initialize(e)
-    @excn_type_name = Mapping.name2elename(e.class.to_s)
+    # DAE: Added .to_s here to fix "Cannot map SOAP::Mapping::SOAPException to SOAP/OM" errors.
+    @excn_type_name = Mapping.name2elename(e.class.to_s).to_s
     @cause = e
   end
 
