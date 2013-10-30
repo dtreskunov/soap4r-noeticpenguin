@@ -523,23 +523,19 @@ module XSDDateTimeImpl
   end
 
   def to_time
-    begin
-      if @data.offset * DayInSec == Time.now.utc_offset
-        d = @data
-	usec = (d.sec_fraction * DayInMicro).round
-        Time.local(d.year, d.month, d.mday, d.hour, d.min, d.sec, usec)
-      else
-        d = @data.newof
-	usec = (d.sec_fraction * DayInMicro).round
-        Time.gm(d.year, d.month, d.mday, d.hour, d.min, d.sec, usec)
-      end
-    rescue ArgumentError
-      nil
+    if @data.offset * DayInSec == Time.now.utc_offset
+      d = @data
+      usec = (d.sec_fraction * 1_000_000).round
+      Time.local(d.year, d.month, d.mday, d.hour, d.min, d.sec, usec)
+    else
+      d = @data.new_offset
+      usec = (d.sec_fraction * 1_000_000).round
+      Time.gm(d.year, d.month, d.mday, d.hour, d.min, d.sec, usec)
     end
   end
 
   def to_date
-    Date.new0(@data.class.jd_to_ajd(@data.jd, 0, 0), 0, @data.start)
+    @data.to_date
   end
 
   def to_datetime
@@ -655,7 +651,7 @@ private
   	s << ".#{ @secfrac }"
       else
 	s << sprintf("%.16f",
-          (@data.sec_fraction * DayInSec).to_f).sub(/^0/, '').sub(/0*$/, '')
+          @data.sec_fraction.to_f).sub(/^0/, '').sub(/0*$/, '')
       end
     end
     add_tz(s)
@@ -705,7 +701,7 @@ private
   	s << ".#{ @secfrac }"
       else
 	s << sprintf("%.16f",
-          (@data.sec_fraction * DayInSec).to_f).sub(/^0/, '').sub(/0*$/, '')
+          @data.sec_fraction.to_f).sub(/^0/, '').sub(/0*$/, '')
       end
     end
     add_tz(s)

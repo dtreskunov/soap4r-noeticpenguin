@@ -2,6 +2,7 @@ module TestUtil
   # MT-unsafe
   def self.require(dir, *features)
     begin
+      $LOAD_PATH.unshift File.expand_path(dir)
       # avoid 'already initialized constant FizzBuzz' warning
       silent do
         Dir.chdir(dir) do
@@ -11,6 +12,7 @@ module TestUtil
         end
       end
     ensure
+      $LOAD_PATH.shift
       features.each do |feature|
         $".delete(feature)
       end

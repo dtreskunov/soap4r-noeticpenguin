@@ -29,8 +29,8 @@ module MarshalTestLib
     iv1 = o1.instance_variables.sort
     iv2 = o2.instance_variables.sort
     assert_equal(iv1, iv2)
-    val1 = iv1.map {|var| o1.instance_eval {eval var}}
-    val2 = iv1.map {|var| o2.instance_eval {eval var}}
+    val1 = iv1.map {|var| o1.instance_eval {eval var.to_s}}
+    val2 = iv1.map {|var| o2.instance_eval {eval var.to_s}}
     assert_equal(val1, val2, msg)
     if block_given?
       assert_equal(yield(o1), yield(o2), msg)
@@ -421,8 +421,8 @@ module MarshalTestLib
     end
     assert_raises(TypeError) { marshaltest(o) }
     assert_raises(TypeError) { marshaltest(c) }
-    assert_raises(TypeError) { marshaltest(ARGF) }
-    assert_raises(TypeError) { marshaltest(ENV) }
+    #assert_raises(TypeError) { marshaltest(ARGF) }
+    #assert_raises(TypeError) { marshaltest(ENV) }
   end
 
   def test_extend

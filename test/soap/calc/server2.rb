@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'soap/rpc/standaloneServer'
-require 'calc2'
+require_relative 'calc2'
 
 class CalcServer2 < SOAP::RPC::StandaloneServer
   def on_init

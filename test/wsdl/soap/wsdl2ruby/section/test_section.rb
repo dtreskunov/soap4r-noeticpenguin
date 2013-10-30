@@ -9,10 +9,11 @@ module WSDL; module SOAP
 
 class TestSection < Test::Unit::TestCase
   DIR = File.dirname(File.expand_path(__FILE__))
-  RUBY = Config::CONFIG['RUBY_INSTALL_NAME']
+  RUBY = RbConfig::CONFIG['RUBY_INSTALL_NAME']
+  LIBDIR = File.expand_path('../../../../../../lib', __FILE__)
 
   def setup
-    system("cd #{DIR} && #{RUBY} #{pathname("../../../../../bin/xsd2ruby.rb")} --xsd #{pathname("section.xsd")} --classdef --force --quiet")
+    system("cd #{DIR} && #{RUBY} -I#{LIBDIR} #{pathname("../../../../../bin/xsd2ruby.rb")} --xsd #{pathname("section.xsd")} --classdef --force --quiet")
   end
 
   def teardown

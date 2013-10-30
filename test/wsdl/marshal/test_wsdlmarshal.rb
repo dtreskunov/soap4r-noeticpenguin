@@ -31,7 +31,7 @@ class WSDLMarshaller
 end
 
 
-require File.join(File.dirname(__FILE__), 'person_org')
+require_relative 'person_org'
 
 class Person
   def ==(rhs)

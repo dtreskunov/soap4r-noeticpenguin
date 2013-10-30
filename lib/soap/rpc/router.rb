@@ -84,6 +84,7 @@ class Router
 
   def add_rpc_servant(obj, namespace)
     ::SOAP::RPC.defined_methods(obj).each do |name|
+      name = name.to_s
       begin
         qname = XSD::QName.new(namespace, name)
         param_def = ::SOAP::RPC::SOAPMethod.derive_rpc_param_def(obj, name)

@@ -80,11 +80,12 @@ Methods = [
     EOD
     wsdl_name = @definitions.name ? @definitions.name.name : 'default'
     mrname = safeconstname(wsdl_name + 'MappingRegistry')
+    module_prefix = @modulepath.nil? ? '' : ('::' + @modulepath.first + '::')
     c.def_method("initialize", "endpoint_url = nil") do
       %Q[endpoint_url ||= DefaultEndpointUrl\n] +
       %Q[super(endpoint_url, nil)\n] +
-      %Q[self.mapping_registry = ::#{@modulepath.first}::#{mrname}::EncodedRegistry\n] +
-      %Q[self.literal_mapping_registry = ::#{@modulepath.first}::#{mrname}::LiteralRegistry\n] +
+      %Q[self.mapping_registry = #{module_prefix}#{mrname}::EncodedRegistry\n] +
+      %Q[self.literal_mapping_registry = #{module_prefix}#{mrname}::LiteralRegistry\n] +
       %Q[init_methods]
     end
     c.def_privatemethod("init_methods") do

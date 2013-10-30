@@ -70,7 +70,7 @@ class Property
   LINE_REGEXP = Regexp.new("^#{DEF_REGSRC}$")
   def load(stream)
     key_prefix = ""
-    stream.readlines.each_with_index do |line, lineno|
+    stream.lines.each_with_index do |line, lineno|
       line.sub!(/\r?\n\z/u, '')
       case line
       when COMMENT_REGEXP
