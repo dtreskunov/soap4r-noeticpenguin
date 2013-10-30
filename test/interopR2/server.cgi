@@ -1,5 +1,17 @@
 #!/usr/bin/env ruby
 
+# monkey-patch the Etc module, because its sysconfdir() method sometimes returns nil...
+require "etc"
+module Etc
+  class << self
+    alias_method :orig_sysconfdir, :sysconfdir
+    def sysconfdir
+      orig_sysconfdir() || ''
+    end
+  end
+end
+
+require 'bundler/setup'
 $:.unshift(".")
 
 #$KCODE = "UTF8"      # Set $KCODE before loading 'soap/xmlparser'.

@@ -99,12 +99,14 @@ __EOX__
   end
 
   def test_direct
+    skip('auth is not supported under soap4r + net/http')
     @client.wiredump_dev = STDOUT if $DEBUG
     @client.options["protocol.http.auth"] << [@url, "admin", "admin"]
     assert_equal("OK", @client.do_server_proc)
   end
 
   def test_proxy
+    skip('auth is not supported under soap4r + net/http')
     setup_proxyserver
     @client.wiredump_dev = STDOUT if $DEBUG
     @client.options["protocol.http.proxy"] = @proxyurl
